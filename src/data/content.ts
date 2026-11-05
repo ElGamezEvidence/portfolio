@@ -34,6 +34,8 @@ export const ui = {
     heroLead:
       'Je conçois et livre des applications web et mobiles de bout en bout : API sécurisées, interfaces produit, et mise en production.',
     heroSeek: 'Recherche un poste Full Stack ou Backend dans une équipe produit.',
+    spoken: 'Arabe · Français · Anglais',
+    license: 'Permis B',
     ctaProjects: 'Voir les projets',
     ctaContact: 'Me contacter',
     dossierKicker: 'En poste',
@@ -68,6 +70,7 @@ export const ui = {
     projectsLead:
       'Trois réalisations présentées comme des études de cas : le produit en entreprise, un assistant de carrière, et une boutique en ligne.',
     caseCta: 'Étude de cas',
+    scope: 'Périmètre porté',
     illustrated: 'Aperçu illustré',
     contactIndex: '05',
     contactTitle: 'Contact',
@@ -112,6 +115,8 @@ export const ui = {
     heroLead:
       'I design and ship web and mobile products end to end: secure APIs, product interfaces, and production delivery.',
     heroSeek: 'Looking for a Full Stack or Backend role on a product team.',
+    spoken: 'Arabic · French · English',
+    license: 'Driving licence B',
     ctaProjects: 'View the work',
     ctaContact: 'Get in touch',
     dossierKicker: 'Currently',
@@ -145,6 +150,7 @@ export const ui = {
     projectsTitle: 'Selected work',
     projectsLead: 'Three case studies: the product at work, a career assistant, and an online store.',
     caseCta: 'Case study',
+    scope: 'What I owned',
     illustrated: 'Illustrated preview',
     contactIndex: '05',
     contactTitle: 'Contact',

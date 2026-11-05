@@ -1,4 +1,4 @@
-import { AnimatePresence, motion, useMotionValue, useScroll, useSpring } from 'framer-motion'
+import { AnimatePresence, motion, useScroll, useSpring } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { profile } from '../data/content.ts'
@@ -11,35 +11,22 @@ export function ScrollProgress() {
   return <motion.div className="progress" style={{ scaleX }} />
 }
 
-export function CursorGlow() {
-  const x = useMotionValue(-500)
-  const y = useMotionValue(-500)
-
-  useEffect(() => {
-    const fine = window.matchMedia('(pointer: fine)').matches
-    if (!fine) return
-    const move = (event: PointerEvent) => {
-      x.set(event.clientX - 200)
-      y.set(event.clientY - 200)
-    }
-    window.addEventListener('pointermove', move)
-    return () => window.removeEventListener('pointermove', move)
-  }, [x, y])
-
-  return <motion.div className="glow" style={{ x, y }} aria-hidden="true" />
-}
-
 export function Intro({ onDone }: { onDone: () => void }) {
   useEffect(() => {
     const timer = window.setTimeout(() => {
       window.sessionStorage.setItem('ie-intro', '1')
       onDone()
-    }, 1250)
+    }, 780)
     return () => window.clearTimeout(timer)
   }, [onDone])
 
   return (
-    <motion.div className="loader" exit={{ opacity: 0 }} transition={{ duration: 0.45 }} role="status">
+    <motion.div
+      className="loader"
+      exit={{ y: '-100%' }}
+      transition={{ duration: 0.75, ease: [0.76, 0, 0.24, 1] }}
+      role="status"
+    >
       <div className="loader-inner">
         <span>IE</span>
         <strong>Issam El Gamez</strong>
@@ -49,8 +36,24 @@ export function Intro({ onDone }: { onDone: () => void }) {
   )
 }
 
-export function Nav() {
+function LanguageSwitch() {
   const { copy, lang, setLang } = useI18n()
+  return (
+    <div className="lang" role="group" aria-label={copy.langLabel}>
+      <button type="button" aria-pressed={lang === 'fr'} onClick={() => setLang('fr')}>
+        <span className="short">FR</span>
+        <span className="long">Français</span>
+      </button>
+      <button type="button" aria-pressed={lang === 'en'} onClick={() => setLang('en')}>
+        <span className="short">EN</span>
+        <span className="long">English</span>
+      </button>
+    </div>
+  )
+}
+
+export function Nav() {
+  const { copy } = useI18n()
   const { pathname } = useLocation()
   const [menuPath, setMenuPath] = useState<string | null>(null)
   const open = menuPath === pathname
@@ -102,7 +105,7 @@ export function Nav() {
       <div className="nav-inner">
         <Link to="/" className="brand" aria-label="Issam El Gamez">
           <span>IE</span>
-          Issam El Gamez
+          <span className="brand-name">Issam El Gamez</span>
         </Link>
         <nav className="nav-links" aria-label="Sections">
           {copy.nav.map((item) => (
@@ -116,14 +119,7 @@ export function Nav() {
             <i />
             {copy.status}
           </p>
-          <div className="lang" role="group" aria-label={copy.langLabel}>
-            <button type="button" aria-pressed={lang === 'fr'} onClick={() => setLang('fr')}>
-              FR
-            </button>
-            <button type="button" aria-pressed={lang === 'en'} onClick={() => setLang('en')}>
-              EN
-            </button>
-          </div>
+          <LanguageSwitch />
           <button
             type="button"
             className="burger"
@@ -152,6 +148,7 @@ export function Nav() {
                 {item.label}
               </a>
             ))}
+            <LanguageSwitch />
           </motion.div>
         )}
       </AnimatePresence>

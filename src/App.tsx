@@ -1,16 +1,11 @@
-import { AnimatePresence, MotionConfig } from 'framer-motion'
-import { useEffect, useState } from 'react'
+import { AnimatePresence, MotionConfig, motion } from 'framer-motion'
+import { useEffect } from 'react'
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
-import { CursorGlow, Footer, Intro, Nav, ScrollProgress } from './components/Chrome.tsx'
+import { Footer, Nav, ScrollProgress } from './components/Chrome.tsx'
 import { LanguageProvider, useI18n } from './i18n/LanguageContext.tsx'
 import { Home } from './pages/Home.tsx'
 import { NotFound } from './pages/NotFound.tsx'
 import { ProjectPage } from './pages/ProjectPage.tsx'
-
-function shouldPlayIntro() {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false
-  return window.sessionStorage.getItem('ie-intro') !== '1'
-}
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -22,7 +17,7 @@ function ScrollToTop() {
 
 function Shell() {
   const { copy } = useI18n()
-  const [showIntro, setShowIntro] = useState(shouldPlayIntro)
+  const location = useLocation()
 
   return (
     <>
@@ -30,16 +25,24 @@ function Shell() {
         {copy.skip}
       </a>
       <ScrollProgress />
-      <CursorGlow />
       <ScrollToTop />
       <Nav />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/projets/:slug" element={<ProjectPage />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={location.pathname}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <Routes location={location}>
+            <Route path="/" element={<Home />} />
+            <Route path="/projets/:slug" element={<ProjectPage />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </motion.div>
+      </AnimatePresence>
       <Footer />
-      <AnimatePresence>{showIntro && <Intro onDone={() => setShowIntro(false)} />}</AnimatePresence>
     </>
   )
 }

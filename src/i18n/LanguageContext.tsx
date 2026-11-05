@@ -11,7 +11,9 @@ const LanguageContext = createContext<LanguageValue | null>(null)
 
 function readLang(): Lang {
   if (typeof window === 'undefined') return 'fr'
-  return window.localStorage.getItem('lang') === 'en' ? 'en' : 'fr'
+  const saved = window.localStorage.getItem('lang')
+  if (saved === 'en' || saved === 'fr') return saved
+  return navigator.language.toLowerCase().startsWith('en') ? 'en' : 'fr'
 }
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
@@ -28,6 +30,15 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       lang === 'fr'
         ? 'Issam El Gamez — Développeur Full Stack'
         : 'Issam El Gamez — Full Stack Developer'
+    const description = document.querySelector('meta[name="description"]')
+    if (description) {
+      description.setAttribute(
+        'content',
+        lang === 'fr'
+          ? 'Portfolio d’Issam El Gamez, développeur Full Stack et team lead à Casablanca. React, Angular, NestJS, .NET, TypeScript.'
+          : 'Portfolio of Issam El Gamez, full stack developer and team lead in Casablanca. React, Angular, NestJS, .NET, TypeScript.',
+      )
+    }
   }, [lang])
 
   const value = useMemo(() => ({ lang, setLang, copy: ui[lang] }), [lang, setLang])

@@ -1,4 +1,5 @@
 import type { ProjectVisual } from '../data/content.ts'
+import { useI18n } from '../i18n/LanguageContext.tsx'
 
 type Props = {
   variant: ProjectVisual
@@ -26,6 +27,20 @@ export function ProjectVisual({ variant, caption, label }: Props) {
 }
 
 function OpsScreen() {
+  const { lang } = useI18n()
+  const rows = lang === 'fr'
+    ? [
+        ['Web', 'React'],
+        ['Terrain', 'Expo'],
+        ['Données', 'PostgreSQL'],
+        ['Livraison', 'Kubernetes'],
+      ]
+    : [
+        ['Web', 'React'],
+        ['Field', 'Expo'],
+        ['Data', 'PostgreSQL'],
+        ['Delivery', 'Kubernetes'],
+      ]
   return (
     <div className="screen ops">
       <aside>
@@ -50,22 +65,12 @@ function OpsScreen() {
           </div>
         </div>
         <ul>
-          <li>
-            <span>Web</span>
-            <em>React</em>
-          </li>
-          <li>
-            <span>Terrain</span>
-            <em>Expo</em>
-          </li>
-          <li>
-            <span>Données</span>
-            <em>PostgreSQL</em>
-          </li>
-          <li>
-            <span>Livraison</span>
-            <em>Kubernetes</em>
-          </li>
+          {rows.map(([label, value]) => (
+            <li key={label}>
+              <span>{label}</span>
+              <em>{value}</em>
+            </li>
+          ))}
         </ul>
       </div>
     </div>
@@ -73,11 +78,12 @@ function OpsScreen() {
 }
 
 function CareerScreen() {
+  const { lang } = useI18n()
   const rows = [
-    { name: 'Profil', width: '92%' },
+    { name: lang === 'fr' ? 'Profil' : 'Profile', width: '92%' },
     { name: 'CV', width: '78%' },
     { name: 'Match', width: '84%' },
-    { name: 'Suivi', width: '64%' },
+    { name: lang === 'fr' ? 'Suivi' : 'Pipeline', width: '64%' },
   ]
   return (
     <div className="screen career">

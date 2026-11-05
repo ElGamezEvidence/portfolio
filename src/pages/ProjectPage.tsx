@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion'
 import { Link, useParams } from 'react-router-dom'
 import { ProjectVisual } from '../components/ProjectVisual.tsx'
 import { ArrowIcon } from '../components/Icons.tsx'
@@ -17,13 +16,7 @@ export function ProjectPage() {
   const next = projects[(index + 1) % projects.length]
 
   return (
-    <motion.main
-      className="case"
-      id="contenu"
-      initial={{ opacity: 0, y: 18 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-    >
+    <main className="case" id="contenu">
       <div className="case-top">
         <Link to="/#projets" className="text-link back-link">
           <ArrowIcon />
@@ -110,6 +103,6 @@ export function ProjectPage() {
         <strong>{tx(lang, next.title)}</strong>
         <ArrowIcon />
       </Link>
-    </motion.main>
+    </main>
   )
 }

@@ -19,9 +19,11 @@ import {
 } from '../data/content.ts'
 import { useI18n } from '../i18n/LanguageContext.tsx'
 
-const rise = {
-  hidden: { opacity: 0, y: 22 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] as const } },
+const ease = [0.16, 1, 0.3, 1] as const
+
+const fade = {
+  hidden: { opacity: 0, y: 14 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease } },
 }
 
 function chipLabel(lang: Lang, item: Chip) {
@@ -46,18 +48,15 @@ export function Home() {
   return (
     <main id="contenu">
       <section className="hero">
-        <p className="hero-mark" aria-hidden="true">
-          IE
-        </p>
-        <motion.div className="hero-copy" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.08 } } }}>
-          <motion.p className="kicker" variants={rise}>{copy.heroKicker}</motion.p>
-          <motion.h1 className="display" variants={rise}>
-            <span>Issam</span>
+        <motion.div className="hero-copy" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.06, delayChildren: 0.04 } } }}>
+          <motion.p className="kicker" variants={fade}>{copy.heroKicker}</motion.p>
+          <motion.h1 className="display" variants={fade}>
+            <span className="line-inner">Issam</span>
             <span className="name-last">El Gamez</span>
           </motion.h1>
-          <motion.p className="lead" variants={rise}>{copy.heroLead}</motion.p>
-          <motion.p className="seek" variants={rise}>{copy.heroSeek}</motion.p>
-          <motion.div className="hero-actions" variants={rise}>
+          <motion.p className="lead" variants={fade}>{copy.heroLead}</motion.p>
+          <motion.p className="seek" variants={fade}>{copy.heroSeek}</motion.p>
+          <motion.div className="hero-actions" variants={fade}>
             <a className="btn btn-primary" href="#projets">
               {copy.ctaProjects}
               <ArrowIcon />
@@ -66,45 +65,43 @@ export function Home() {
               {copy.ctaContact}
             </a>
           </motion.div>
-          <motion.p className="where" variants={rise}>
+          <motion.p className="where" variants={fade}>
             <i />
             {tx(lang, profile.city)}
             <span>·</span>
-            Arabe · Français · Anglais
+            {copy.spoken}
             <span>·</span>
-            Permis B
+            {copy.license}
           </motion.p>
         </motion.div>
         <motion.aside
           className="dossier"
-          initial={{ opacity: 0, y: 28 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+          initial="hidden"
+          animate="show"
+          variants={{ show: { transition: { staggerChildren: 0.08, delayChildren: 0.18 } } }}
         >
-          <p className="kicker">{copy.dossierKicker}</p>
-          <h2>{copy.dossierCompany}</h2>
-          <p className="dossier-meta">{copy.dossierMeta}</p>
-          <ul>
+          <motion.p className="kicker" variants={fade}>{copy.dossierKicker}</motion.p>
+          <motion.h2 variants={fade}>{copy.dossierCompany}</motion.h2>
+          <motion.p className="dossier-meta" variants={fade}>{copy.dossierMeta}</motion.p>
+          <motion.ul variants={{ show: { transition: { staggerChildren: 0.06 } } }}>
             {copy.axes.map((axis) => (
-              <li key={axis.n}>
+              <motion.li key={axis.n} variants={fade}>
                 <span>{axis.n}</span>
                 <div>
                   <strong>{axis.t}</strong>
                   <p>{axis.d}</p>
                 </div>
-              </li>
+              </motion.li>
             ))}
-          </ul>
+          </motion.ul>
         </motion.aside>
       </section>
 
-      <div className="marquee" aria-hidden="true">
-        <div className="marquee-track">
-          {[...marquee, ...marquee].map((item, index) => (
-            <span key={`${item}-${index}`}>{item}</span>
-          ))}
-        </div>
-      </div>
+      <ul className="stack-row" aria-label="Stack">
+        {marquee.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
 
       <section id="profil" className="section">
         <Reveal>
@@ -228,7 +225,13 @@ export function Home() {
                   </p>
                   <h3>{tx(lang, project.title)}</h3>
                   <p>{tx(lang, project.summary)}</p>
-                  <ul>
+                  <p className="scope-label">{copy.scope}</p>
+                  <ul className="scope">
+                    {txList(lang, project.points).slice(0, 3).map((point) => (
+                      <li key={point}>{point}</li>
+                    ))}
+                  </ul>
+                  <ul className="chips">
                     {project.stack.slice(0, 5).map((item) => (
                       <li key={item}>{item}</li>
                     ))}

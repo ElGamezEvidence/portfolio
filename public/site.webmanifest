@@ -1,0 +1,9 @@
+{
+  "name": "Issam El Gamez",
+  "short_name": "Issam El Gamez",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0c0b0a",
+  "theme_color": "#0c0b0a",
+  "lang": "fr"
+}
